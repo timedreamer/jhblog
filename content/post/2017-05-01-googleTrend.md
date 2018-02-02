@@ -5,7 +5,6 @@ lastmod: 2018-02-02
 draft: false
 tags: ["google", "web"]
 categories: ["web"]
-toc = true
 ---
 
 Today, I tried [Google trend](https://trends.google.com/trends/) for some interesting comparisons. In Google trend, you can search just one item or topic or compare several.

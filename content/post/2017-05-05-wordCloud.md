@@ -5,7 +5,6 @@ lastmod: 2018-02-02
 draft: false
 tags: ["R", "wordCloud", "visualization"]
 categories: ["dry lab"]
-toc = true
 ---
 
 This post, I wanted to create a word cloud (also called tag cloud) figure for Karen's paper. I chose papers with Karen's name since 2008, copied their title and abstract and saved in a plain text file called **abstract_Karen2008.txt**.

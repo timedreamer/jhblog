@@ -5,7 +5,6 @@ lastmod: 2018-02-02
 draft: false
 tags: ["rna-seq", "bioinformatics"]
 categories: ["dry lab"]
-toc = true
 ---
 
 When analyzing RNA-Seq data, rRNA and tRNA reads can be removed from the sequencing files. Here, I briefly describe how to do this step using [ERNE](http://erne.sourceforge.net/index.php)

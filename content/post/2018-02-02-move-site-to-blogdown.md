@@ -1,5 +1,5 @@
 ---
-title: move site to blogdown
+title: Move site to blogdown
 author: Ji Huang
 date: '2018-02-02'
 lastmod: '2018-02-03'

@@ -126,8 +126,8 @@ Yes I can see it! Awesome!!
 
 Whoo!! Done!
 
-I'm very happy about it. Hope you find it's helpful too. [This post][9] on setting instructions is also very helpful. Thanks to the author.
 
+I'm very happy about it. Hope you find it's helpful too. [This post][9] on setting instructions is also very helpful. Thanks to the author.
 
 
 
@@ -140,3 +140,4 @@ I'm very happy about it. Hope you find it's helpful too. [This post][9] on setti
 [7]: https://packagecontrol.io/packages/rsub
 [8]: https://packagecontrol.io/
 [9]: http://www.martinrowan.co.uk/2015/07/live-editing-raspberry-pi-files-remotely-windows-pc-using-sublime-text-rsub-putty/
+

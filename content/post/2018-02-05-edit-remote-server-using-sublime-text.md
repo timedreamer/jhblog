@@ -1,5 +1,5 @@
 ---
-title: Edit remote server using Sublime Text
+title: Edit remote server files using Sublime Text
 author: Ji Huang
 date: '2018-02-05'
 slug: edit-remote-server-using-sublime-text

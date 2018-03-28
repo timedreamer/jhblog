@@ -71,15 +71,18 @@ table refFlat
 Here is the file (Zea_mays.AGPv3.31.genePred) we got:
 
 ```
-transcript:GRMZM6G708185_T01    scaffold_99     +       127     1747    185     1746    4       127,571,1364,1507,      326,877,1428,1747, 0gene:GRMZM6G708185      cmpl    cmpl    0,0,0,1,
+transcript:GRMZM6G708185_T01    scaffold_99     +       127     1747    185     1746    4       127,571,1364,1507,      326,877,1428,1747, 0  gene:GRMZM6G708185      cmpl    cmpl    0,0,0,1,
 transcript:GRMZM6G036147_T01    scaffold_98     +       99      1334    108     1266    4       99,336,688,837, 240,594,733,1334,       0  gene:GRMZM6G036147       cmpl    cmpl    0,0,0,0,
-transcript:GRMZM6G699895_T01    scaffold_94     +       699     3163    707     2835    4       699,1717,2535,2721,     867,1848,2646,3163,0gene:GRMZM6G699895      cmpl    cmpl    0,1,0,0,
+transcript:GRMZM6G699895_T01    scaffold_94     +       699     3163    707     2835    4       699,1717,2535,2721,     867,1848,2646,3163,0  gene:GRMZM6G699895      cmpl    cmpl    0,1,0,0,
 
 ```
 
 So there are couple of things we need to do:
+
 1. delete `transcript:` and `gene:`.
+
 2. duplicate the first column. The first column in the **refFlat** format is the gene name and the second is the transcript name. But here, since we don't care gene/transcript name so much, so we can just duplicate the first column.
+
 3. keep the first 11 columns. Delete some extra column that we don't need in **refFlat** format.
 
 The code is below:

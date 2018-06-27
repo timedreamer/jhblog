@@ -103,7 +103,7 @@ The step is pretty easy. Just follow the [document online](https://broadinstitut
 It's ok that we don't have the `RIBOSOMAL_INTERVALS` file. The single- and paired-end libraries need different settings on `STRAND_SPECIFICITY `.
 
 ```shell
-java -jar /home5/jhuang/software/picard-2.10.2/picard.jar CollectRnaSeqMetrics I=YOUR.bam O=YOUR.metrics REF_FLAT=YOUR.refFlat STRAND=SECOND_READ_TRANSCRIPTION_STRAND
+java -jar /home5/jhuang/software/picard-2.10.2/picard.jar CollectRnaSeqMetrics I=YOUR.bam O=YOUR.metrics REF_FLAT=YOUR.refFlat STRAND=NONE
 ```
 
 It took ~30min on my bam file. So probably a good idea to send it to background. The result is a single txt file. The meaning for each column can be found [here](http://broadinstitute.github.io/picard/picard-metric-definitions.html#RnaSeqMetrics). **PF** means **passing filter**. You are welcome~

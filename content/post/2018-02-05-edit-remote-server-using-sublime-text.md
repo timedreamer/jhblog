@@ -8,7 +8,7 @@ categories:
 tags:
   - text-editor
   - misc
-lastmod: '2018-02-05T16:03:53-05:00'
+lastmod: '2018-06-27'
 keywords: []
 description: ''
 comment: yes
@@ -128,6 +128,31 @@ Whoo!! Done!
 
 
 I'm very happy about it. Hope you find it's helpful too. [This post][9] on setting instructions is also very helpful. Thanks to the author.
+
+---
+
+**Edited 2018-06-27**
+
+I started to use [MobaXterm](https://mobaxterm.mobatek.net/) since last week. It offers a lot of nice features, for example, built-in X11 forwarding. Overall, it's really good terminal. However, rsub/rmate setting in MobaXterm is different from Putty. Here are the settings I use and it works.
+
+Step1: Open MobaXterm. On the top, click an icon called **Tunneling**.
+
+![Imgur](https://i.imgur.com/oB9bdKV.png)
+
+Step2: From the popup window, click **New SSH tunnel**.
+
+![Imgur](https://i.imgur.com/hvzmtnG.png)
+
+Step3: Fill all blanks in the next window. Most of settings are the same as **Putty**. Make sure to put the server IP and your login name.
+
+![Imgur](https://i.imgur.com/QmgXc1s.png)
+
+Step4: Now your tunnel has been set. But it does need to be turn on.
+
+![Imgur](https://i.imgur.com/TAYK41g.png)
+
+It may take ~1min to be able to use `rmate`. Works on my desktop. Hope this works for you too!
+
 
 
 

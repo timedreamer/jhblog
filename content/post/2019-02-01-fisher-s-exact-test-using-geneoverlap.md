@@ -30,9 +30,9 @@ I use the [Fisher's exact test](https://en.wikipedia.org/wiki/Fisher%27s_exact_t
 The test based on the hypergeometric distribution (hypergeometric test) is identical to the corresponding one-tailed version of Fisher's exact test). Reciprocally, the p-value of a two-sided Fisher's exact test can be calculated as the sum of two appropriate hypergeometric tests (for more information see)
 
 
-The Fisher's exact test starts with the contigency table which similar with chi-squared test. Previously, I've been manually made the contingency table and did the test using `fisher.test` in R. However, I found this method is cumbersome and error prone. 
+The Fisher's exact test starts with the contingency table which similar with chi-squared test. Previously, I've been manually made the contingency table and did the test using `fisher.test` in R. However, I found this method is cumbersome and error prone. 
 
-In this post, I found the [**GeneOverlap**](https://www.bioconductor.org/packages/release/bioc/html/GeneOverlap.html) package in R can do this job much more elegent. The nice thing is: it can also do the test for two `list` and have a convinient plotting function. More info is in the [manual](https://bioconductor.org/packages/release/bioc/vignettes/GeneOverlap/inst/doc/GeneOverlap.pdf).
+In this post, I found the [**GeneOverlap**](https://www.bioconductor.org/packages/release/bioc/html/GeneOverlap.html) package in R can do this job much more elegant. The nice thing is: it can also do the test for two `list` and have a convenient plotting function. More info is in the [manual](https://bioconductor.org/packages/release/bioc/vignettes/GeneOverlap/inst/doc/GeneOverlap.pdf).
 
 ---
 
@@ -76,9 +76,9 @@ There are also other functions that are quite useful, like `getNestedList` which
 > accessor can get gene lists for each comparison as a nested list: the outer
 list represents the columns and the inner list represents the rows
 
-In this way, I don't need to do `intersect()` repeatly.
+In this way, I don't need to do `intersect()` repeatedly.
 
-Overall, this is a really nice small pacakge. I'm going to use it in my workflow regularly.
+Overall, this is a really nice small package. I'm going to use it in my workflow regularly.
 
 
 

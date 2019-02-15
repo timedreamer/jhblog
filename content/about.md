@@ -1,7 +1,7 @@
 ---
 title: "About"
 date: 2017-07-10
-lastmod: 2018-02-02
+lastmod: 2019-02-14
 menu: "main"
 weight: 50
 
@@ -13,7 +13,7 @@ mathjax: false
 ![My bio picture](/img/my-bio.png)
 
 
-My name is Ji Huang. I am a PhD student in [Dr. Karen McGinnis][1] lab at Florida State University. We use maize as our model organism to study gene regulation, especially epigenetic regulation. I'm interested in how genes and TEs are regulated at genome-wide scale. I become more and more interesed in gene regulation by transcriptional factors (TFs) recently. Before joining FSU, I got my Bachelor degree in biological science from [Huazhong Agricultural University][5], China.
+My name is Ji Huang. I'm a post-doc at [Gloria Coruzzi lab][7] at NYU. I did my PhD in [Dr. Karen McGinnis][1] lab at Florida State University. I'm interested in how genes are regulated by transcriptional factors (TFs) in the network. I got my Bachelor degree in biological science from [Huazhong Agricultural University][5], China.
 
 You can view my CV here. [Get the PDF](/Ji_Huang_CV_201711.pdf).
 
@@ -23,7 +23,7 @@ Find me at:
   - [Github][4]
   - [Twitter][6]
 
-A glance of our corn field.
+A glance of our corn field at Florida.
 
 ![corn field](/img/field_corn.jpg)
 
@@ -35,3 +35,4 @@ A glance of our corn field.
 [4]:https://github.com/timedreamer
 [5]:http://www.hzau.edu.cn/
 [6]:https://twitter.com/ji_timedreamer
+[7]:http://coruzzilab.bio.nyu.edu/

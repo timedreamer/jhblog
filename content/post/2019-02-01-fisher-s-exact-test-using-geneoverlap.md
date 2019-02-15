@@ -44,15 +44,12 @@ So in the code next, I have a `background` that contains all the 22000 genes tha
 # load library
 library(GeneOverlap)
 
-# create the contigency table
-go.obj <- newGeneOverlap(test_list, DE_master, genome.size = length(background))
-
 # Do the testing
 gom.obj <- newGOM(test_list, DE_master, genome.size = length(background))
 getMatrix(gom.obj, name="pval")
 
 # Plot the heatmap
-drawHeatmap(gom.obj
+drawHeatmap(gom.obj)
 ```
 
 You can also compare a `list` to itself.

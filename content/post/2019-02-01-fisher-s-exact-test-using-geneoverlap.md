@@ -9,7 +9,7 @@ tags:
   - R
   - bioinformatics
   - statistics
-lastmod: '2019-02-01T14:53:17-05:00'
+lastmod: '2019-02-18'
 keywords: []
 description: ''
 comment: yes
@@ -77,7 +77,41 @@ In this way, I don't need to do `intersect()` repeatedly.
 
 Overall, this is a really nice small package. I'm going to use it in my workflow regularly.
 
+## 2019-02-18 Update
 
+I found by default, the p-values reported by `getMatrix` are without adjustment. So I wrote a handy function `function_02_geneOverlap_adjusted_pvalue_matrix.R` to adjust multiple testing by "BH".
 
+The function returns the adjusted pvalue matrix with the same row/column names. The significant values were set to `1` and non-significant values set to `0`. This helps me to plot the heatmap. You can also remove the `pv_adj <- 1* (pv_adj < cut_off)` line, so the function will return the adjusted pvalue matrix with the adjusted p-value numbers.
+
+```function
+pval_adj <- function(list1, list2, genome.size, cut_off){
+    gom.obj <- newGOM(list1, list2, genome.size)
+    pv_raw <- getMatrix(gom.obj, name="pval")
+
+    # adjust p-values by "BH".
+    pv_adj <- matrix(p.adjust(pv_raw, method = "BH"),nrow = nrow(pv_raw))
+    
+    # set the cut-off value for significance.
+    pv_adj <- 1* (pv_adj < cut_off)
+    
+    colnames(pv_adj) <- colnames(pv_raw)
+    rownames(pv_adj) <- rownames(pv_raw)
+
+    return(pv_adj)
+}
+```
+
+To use the function, simply call the function. The result can be visualized by `pheatmap`.
+
+```r
+source("src/function_02_geneOverlap_adjusted_pvalue_matrix.R")
+
+tt1 <- pval_adj(test_list1, test_list2, genome.size = 22000,
+                cut_off = 0.01)
+pheatmap(t(tt1), cluster_cols = F, cluster_rows = F,
+         fontsize = 20,cellwidth = 30, angle_col = "45",
+         main = "test_lists with p-value adjustment")
+
+```
 
 

@@ -81,22 +81,18 @@ Overall, this is a really nice small package. I'm going to use it in my workflow
 
 I found by default, the p-values reported by `getMatrix` are without adjustment. So I wrote a handy function `function_02_geneOverlap_adjusted_pvalue_matrix.R` to adjust multiple testing by "BH".
 
-The function returns the adjusted pvalue matrix with the same row/column names. The significant values were set to `1` and non-significant values set to `0`. This helps me to plot the heatmap. You can also remove the `pv_adj <- 1* (pv_adj < cut_off)` line, so the function will return the adjusted pvalue matrix with the adjusted p-value numbers.
+The function returns the adjusted pvalue matrix with the same row/column names. The non-significant values set to `NA`, so it will be plotted as *Grey* in heatmap.
 
 ```function
 pval_adj <- function(list1, list2, genome.size, cut_off){
     gom.obj <- newGOM(list1, list2, genome.size)
     pv_raw <- getMatrix(gom.obj, name="pval")
-
-    # adjust p-values by "BH".
     pv_adj <- matrix(p.adjust(pv_raw, method = "BH"),nrow = nrow(pv_raw))
     
-    # set the cut-off value for significance.
-    pv_adj <- 1* (pv_adj < cut_off)
+    pv_adj[pv_adj > cut_off] <- NA
     
     colnames(pv_adj) <- colnames(pv_raw)
     rownames(pv_adj) <- rownames(pv_raw)
-
     return(pv_adj)
 }
 ```
@@ -110,7 +106,8 @@ tt1 <- pval_adj(test_list1, test_list2, genome.size = 22000,
                 cut_off = 0.01)
 pheatmap(t(tt1), cluster_cols = F, cluster_rows = F,
          fontsize = 20,cellwidth = 30, angle_col = "45",
-         main = "test_lists with p-value adjustment")
+         main = "test_lists with p-value adjustment",
+         color = viridis::cividis(100, direction = -1))
 
 ```
 

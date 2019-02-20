@@ -8,7 +8,7 @@ categories:
 tags:
   - bioinformatics
   - rice
-lastmod: '2019-02-08T11:55:59-05:00'
+lastmod: '2019-02-19T11:55:59-05:00'
 keywords: []
 description: ''
 comment: no
@@ -43,7 +43,7 @@ samtools faidx Oryza_sativa.IRGSP-1.0.dna.toplevel.fa
 
 ## 3. Merge all bam file for each genotype
 
-I used `STAR` for the allignment. This step took roughly 12h. Each file is about 90G.
+I used `STAR` for the allignment. This step took roughly 6h. Each file is about 90G.
 
 ```shell
 samtools merge rice_ir108_total.bam ir108*.bam 
@@ -52,7 +52,7 @@ samtools merge rice_ir64_total.bam ir64*.bam
 
 ## 4. Call SNPs
 
-The final `bcf` files are ~19M.
+The final `bcf` files are about 19M.
 
 ```shell
 samtools mpileup --redo-BAQ --min-BQ 20 --per-sample-mF --output-tags DP,AD -f /scratch/cgsb/coruzzi/jh6577/GenomeFile/rice_IRGSP1_0/Oryza_sativa.IRGSP-1.0.dna.toplevel.fa --BCF rice_ir108_total.bam | bcftools call --multiallelic-caller --variants-only -Ob > rice_ir108_var.bcf&
@@ -62,7 +62,7 @@ samtools mpileup --redo-BAQ --min-BQ 20 --per-sample-mF --output-tags DP,AD -f /
 
 ## 5. Filter SNPs
 
-From last step, we will have a lot of false SNPs that may only have several sequences support. To filter low quality SNPs, I used the criteria `DP > 300` which means at least 300 reads support the SNP. Also I only look at the homozygous site `GT == 1|1`. The final `vcf` files were ~6M.
+From last step, we will have a lot of false SNPs that may only have several sequences support. To filter low quality SNPs, I used the criteria `DP > 300` which means at least 300 reads support the SNP. Also I only look at the homozygous site `GT == 1|1`. The final `vcf` files were about 6M.
 
 ```shell
 bcftools view rice_ir108_var.bcf |vcffilter -f "DP > 300" -g "GT = 1|1" > rice_ir108_var_DP300_GT11.vcf&

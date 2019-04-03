@@ -1,0 +1,101 @@
+---
+title: "Rice RAPDB to MSU7 ID conversion"
+author: "Ji Huang"
+date: '2019-04-03'
+comment: no
+contentCopyright: no
+categories: dry lab
+description: ''
+keywords: []
+lastmod: '2019-04-03T16:53:12-04:00'
+mathjax: no
+mathjaxEnableSingleDollar: no
+postMetaInFooter: no
+reward: no
+slug: rice-rapdb-to-msu7-id-conversion
+tags:
+- rice
+- R
+autoCollapseToc: no
+toc: no
+---
+
+In this post, I generate the table for **RAPDB** gene IDs and **MSU7** gene IDs conversion.
+
+<!--more-->
+
+There are some online tools can do the conversion, but it's more handy to have a local version. One online tool is [RAP-DB ID Converter](https://rapdb.dna.affrc.go.jp/tools/converter). The other is [OryzaExpress ID converter](http://bioinf.mind.meiji.ac.jp/OryzaExpress/ID_converter.php).
+
+The conversion table was downloaded from [RAPDB](https://rapdb.dna.affrc.go.jp/download/irgsp1.html) on 2019-04-03.
+
+
+
+# 0. Set up environment.
+
+```{r load_libs, include=FALSE}
+library(tidyverse)
+```
+
+# 1. Read data
+
+```{r file_path, include=FALSE}
+table_path <- "I:/#project/Google Drive (jh6577@nyu.edu)/Project/rice_tables/RAP-MSU_2019-03-22.txt"
+```
+
+The `table_path` was hided.
+
+```{r read_table}
+# read raw downloaded table.
+c_table <- read_tsv(table_path, col_names = c("RAPDB", "MSU"))
+```
+
+
+# 2. Process table.
+
+Get RAPDB gene ID correspondent MSU7 IDs. The MSU7 transcript ID was converted to Gene ID by removing **.[digits]**.
+
+```{r process_table}
+cp_table <- c_table %>% separate_rows(MSU,sep = ",") %>%  
+    mutate(MSU7 = str_replace(.$MSU,"\\.[:digit:]+","")) %>% 
+    select(-MSU) %>% 
+    distinct(RAPDB, MSU7)
+```
+
+There are **`r length(unique(c_table$RAPDB))`** RAPDB genes. And **`r length(unique(cp_table$MSU))`** MSU7 genes.
+
+
+# 3. Save table.
+
+```{r save_table, eval=FALSE}
+write_tsv(cp_table, path = "./RAPDB_MSU_ID_conversion_20190403.txt")
+```
+
+# 3. Some exploratory analysis.
+
+1. How many RAPDB genes don't have MSU7 genes, as indicated by **None** in the `MSU` column?
+
+```{r rapdb_noMSU}
+sum(cp_table$MSU7 == "None")
+```
+
+2. How many MSU7 genes don't have RAPDB IDs, as indicated by **None** in the `RAPDB` column?
+
+```{r msu_noRAPDB}
+sum(cp_table$RAPDB == "None")
+```
+
+3. How many RAPDB genes have multiple MSU7 genes?
+
+The first number should minus 1, because there is one item named *None*.
+```{r rapdb_multiMSU}
+cp_table %>% group_by(RAPDB) %>% tally() %>% filter(n > 1) %>% 
+    dim() %>% magrittr::extract(1) -1
+```
+
+4. How many MSU7 genes have multiple RAPDB genes?
+
+```{r msu_multiRAPDB}
+cp_table %>% group_by(MSU7) %>% tally() %>% filter(n > 1) %>% 
+    dim() %>% magrittr::extract(1) -1
+```
+

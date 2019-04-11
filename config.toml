@@ -105,11 +105,11 @@ copyright = ""            # default: author.name ↓        # 默认为下面配
   [params.social]                                         # 社交链接
 #    a-email = "mailto:your@email.com"
 #    b-stack-overflow = "http://localhost:1313"
-    c-twitter = "https://twitter.com/ji_timedreamer"
+     c-twitter = "https://twitter.com/ji_timedreamer"
 #    d-facebook = "http://localhost:1313"
 #    e-linkedin = "http://localhost:1313"
 #    f-google = "http://localhost:1313"
-    g-github = "https://github.com/timedreamer"
+     g-github = "https://github.com/timedreamer"
 #    h-weibo = "http://localhost:1313"
 #    i-zhihu = "http://localhost:1313"
 #    j-douban = "http://localhost:1313"

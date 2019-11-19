@@ -14,7 +14,8 @@ lastmod: '2019-11-19T11:23:54-05:00'
 keywords: []
 description: ''
 comment: no
-autoCollapseToc: no
+toc: true
+autoCollapseToc: true
 postMetaInFooter: no
 contentCopyright: no
 reward: no

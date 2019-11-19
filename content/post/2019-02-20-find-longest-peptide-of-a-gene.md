@@ -15,7 +15,7 @@ keywords: []
 description: ''
 comment: yes
 toc: true
-autoCollapseToc: no
+autoCollapseToc: true
 postMetaInFooter: no
 contentCopyright: no
 reward: no

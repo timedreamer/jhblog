@@ -14,7 +14,7 @@ lastmod: '2019-02-20T22:36:57-05:00'
 keywords: []
 description: ''
 comment: yes
-toc: no
+toc: true
 autoCollapseToc: no
 postMetaInFooter: no
 contentCopyright: no
@@ -25,6 +25,15 @@ mathjaxEnableSingleDollar: no
 
 <!--more-->
 
+Update: 2019-11-19. For many plant species, you can acturally directly download the longest transcript/peptide from [Phytozome](https://genome.jgi.doe.gov/portal/pages/dynamicOrganismDownload.jsf?organism=Phytozome) (Required to login first). 
+
+You can find the longest *CDS*, *Transcript* and *protein* fasta files.
+
+![](https://i.imgur.com/y2yUbdV.png)
+
+-----
+
+**Original post:**
 
 This script is to (1) download peptide sequences (2) modify the title for the fasta file  (3) choose the longest peptide sequence for each gene.
 

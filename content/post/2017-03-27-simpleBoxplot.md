@@ -11,7 +11,7 @@ In last post, I downloaded TCGA 309 normalized RNA-Seq data for OV tumor tissue.
 
 <!--more-->
 
-I will show two solutions here, one with base R and base plot functions, the other using the so-called [tidy data](http://bit.ly/1V7jmkY), pipe and ggplot2.
+I will show two solutions here, one with base R and base plot functions, the other using the so-called [tidy data](https://bit.ly/1V7jmkY), pipe and ggplot2.
 
 # Base R
 
@@ -62,9 +62,9 @@ grid.arrange(p1, p2, ncol = 2)
 5                    1056.4202                    1372.5640</pre>
 <pre id="rstudio_console_output" class="GGHFMYIBMOB">20531   310</pre>
 
-![Imgur](http://i.imgur.com/qGtQsNU.png)
+![Imgur](https://i.imgur.com/qGtQsNU.png)
 
-![Imgur](http://i.imgur.com/REEsv5O.png)
+![Imgur](https://i.imgur.com/REEsv5O.png)
 
 # Tidy and Pipe
 
@@ -87,7 +87,7 @@ p4 <- ggplot(data=ov1,aes(x=geneName,y=log2(value+1)))+ geom_violin() +
 grid.arrange(p3,p4,ncol=2)
 ```
 
-![Imgur](http://i.imgur.com/xjsWjg4.png)
+![Imgur](https://i.imgur.com/xjsWjg4.png)
 
 # Speed test and memory usage
 
@@ -106,7 +106,7 @@ names(obsize) <- c("expr","expr_m","ov1")
 barplot((obsize/1e6),ylim=c(0,3),las=2,ylab="MB",xlab="object",main="memoryUsage")    
 ```
 
-![Imgur](http://i.imgur.com/onFq8HS.png)
+![Imgur](https://i.imgur.com/onFq8HS.png)
 
 **Ov1 only takes 38.2k! That's impressive. Why? Next time i will test on a bigger dataset.**
 

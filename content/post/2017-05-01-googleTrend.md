@@ -17,16 +17,16 @@ I personally used both of them, Pubmed by default show the newest paper first an
 My question is: which reference database used more often? My guess is Google Scholar because its wide topics, Pubmed is maily for biological science. For all graphs below, red is **Google Scholar** and blue is **Pubmed**.
 
 ### Worldwide 5 years
-![Imgur](http://i.imgur.com/cQiNLKl.png)
+![Imgur](https://i.imgur.com/cQiNLKl.png)
 
 ### USA 5 years
-![Imgur](http://i.imgur.com/wNcuZOr.png)
+![Imgur](https://i.imgur.com/wNcuZOr.png)
 
 ### Worldwide 2004 to now
-![Imgur](http://i.imgur.com/snstXBN.png)
+![Imgur](https://i.imgur.com/snstXBN.png)
 
 ### USA last year
-![Imgur](http://i.imgur.com/bfHIEK0.png)
+![Imgur](https://i.imgur.com/bfHIEK0.png)
 
 ### Conclusion
 Very interesting, couple of things I noticed:
@@ -38,12 +38,12 @@ Very interesting, couple of things I noticed:
 
 ## Four Leagues (NBA vs NFL vs NHL vs MLB)
 ### USA 2004 - Present
-![Imgur](http://i.imgur.com/3SiDH5n.png)
+![Imgur](https://i.imgur.com/3SiDH5n.png)
 
 NBA and NFL are growing.
 
 ### USA Past 12 month
-![Imgur](http://i.imgur.com/z0rMKqQ.png)
+![Imgur](https://i.imgur.com/z0rMKqQ.png)
 
 Peak for NBA is at Christmas Games, such a high peak, incredible.
 

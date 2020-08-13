@@ -9,13 +9,13 @@ There are so many aligner for next generation sequencing, especially for illumin
 
 <!--more-->
 
-Based on the most recent Nature Method paper: [Simulation-based comprehensive benchmarking of RNA-seq aligners](http://go.nature.com/2mD3zwU), CLR, GSNAP, Novoallign performed better than others, including Tophat2 and HISAT2.
+Based on the most recent Nature Method paper: [Simulation-based comprehensive benchmarking of RNA-seq aligners](https://go.nature.com/2mD3zwU), CLR, GSNAP, Novoallign performed better than others, including Tophat2 and HISAT2.
 
-When I started my project, I chose HISAT2 over Tophat2 mainly because of the fast speed. Besides, based on this [blog](http://bit.ly/2ngO3Kn), HISAT2 is comparable to STAR and Tophat2. I also used GSNAP previously for finding SNPs using [123SNP](http://bit.ly/2mkwWDb) developed by Schnable lab. So with a little bit of time available, I  plan to do a simple comparison between GSNAP and HISAT2 based on simulated reads.
+When I started my project, I chose HISAT2 over Tophat2 mainly because of the fast speed. Besides, based on this [blog](https://bit.ly/2ngO3Kn), HISAT2 is comparable to STAR and Tophat2. I also used GSNAP previously for finding SNPs using [123SNP](https://bit.ly/2mkwWDb) developed by Schnable lab. So with a little bit of time available, I  plan to do a simple comparison between GSNAP and HISAT2 based on simulated reads.
 
 # Read simulator
 
-First, we need to choose a short read simulator. There are many open tools available, here is a [**review**](http://go.nature.com/2mkr4d9) in Nature Review Genetics. One of the most widely used and simplest is [wgsim](https://github.com/lh3/wgsim) developed by Heng Li. In the following analysis, I used wgsim for read simulator. However, it generates reads from uniform distribution, but may not represent the true distribution of short reads. Many researchers believe short reads follow negative binomial distribution. A recent R pacakge [polyster](http://bit.ly/2nxvzBo) can do this, here is the [paper](http://bit.ly/2mF6t5W), developed by Jeff Leek. But for me, to keep things simple, I chose wgsim. An aligner comparison [paper](http://bit.ly/2lUu0kD) in 2013 used wgsim for simulating.
+First, we need to choose a short read simulator. There are many open tools available, here is a [**review**](https://go.nature.com/2mkr4d9) in Nature Review Genetics. One of the most widely used and simplest is [wgsim](https://github.com/lh3/wgsim) developed by Heng Li. In the following analysis, I used wgsim for read simulator. However, it generates reads from uniform distribution, but may not represent the true distribution of short reads. Many researchers believe short reads follow negative binomial distribution. A recent R pacakge [polyster](https://bit.ly/2nxvzBo) can do this, here is the [paper](https://bit.ly/2mF6t5W), developed by Jeff Leek. But for me, to keep things simple, I chose wgsim. An aligner comparison [paper](https://bit.ly/2lUu0kD) in 2013 used wgsim for simulating.
 
 I generated 1 million reads from Arabidopsis gene model.
 
@@ -120,7 +120,7 @@ featureCounts -T 16 -p -a Arabidopsis_thaliana.TAIR10.34.gtf -o FScount.txt gsna
 By default, multiple mapped reads were filtered out by FeatureCount. It checks for **NH tag** in BAM files.
 Here is the summary report:
 
-![Imgur](http://i.imgur.com/SzrMoHM.png)
+![Imgur](https://i.imgur.com/SzrMoHM.png)
 
 HISAT2 has more unmapped reads than GSNAP, but less Assigned reads. With more SNPs, assigned reads decreased in both.
 
@@ -135,15 +135,15 @@ Merge real count with FeatureCount result. Some genes are not presented in the r
 
 Percentage of correct aligned reads (I just calculated number of reads in total, did not consider position):
 
-![Imgur](http://i.imgur.com/lY30YG5.png)
+![Imgur](https://i.imgur.com/lY30YG5.png)
 
 This is consistent with previous FeatureCount summary. GSNAP reported more correct reads.
 Pairwise comparisons are very similar, with pearson correlation over 0.94.
-![Imgur](http://i.imgur.com/WICckma.png)
+![Imgur](https://i.imgur.com/WICckma.png)
 
 # Conclusion
-Based on simulated reads, GSNAP reported more assigned reads, more correct assigned reads and less unmapped reads than HISAT2. I know this is far from concrete, but just give a very naiive test. In the future, I will use GSNAP instead. I wonder whether provide pre-made SNP data and GTF file, how much the alignment can be improved.
+Based on simulated reads, GSNAP reported more as signed reads, more correct assigned reads and less unmapped reads than HISAT2. I know this is far from concrete, but just give a very naiive test. In the future, I will use GSNAP instead. I wonder whether provide pre-made SNP data and GTF file, how much the alignment can be improved.
 
 PS: You may also want to check out these two posts.
-1. [HISAT vs STAR vs TopHat2 vs Olego vs SubJunc](http://bit.ly/2ngO3Kn)
-2. [Comparing salmon, kalliso and STAR-HTseq RNA-seq quantification](http://bit.ly/2nwXLVJ)
+1. [HISAT vs STAR vs TopHat2 vs Olego vs SubJunc](https://bit.ly/2ngO3Kn)
+2. [Comparing salmon, kalliso and STAR-HTseq RNA-seq quantification](https://bit.ly/2nwXLVJ)

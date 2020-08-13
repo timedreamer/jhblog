@@ -74,7 +74,7 @@ d["mop",][1] <- "MOP"
 d$word <- as.factor(d$word)
 head(d, 5)
 ```
-![Imgur](http://i.imgur.com/Pm12tju.png)
+![Imgur](https://i.imgur.com/Pm12tju.png)
 
 Fourth, plotting.
 
@@ -83,7 +83,7 @@ Fourth, plotting.
 wordcloud2(data = d,size = 0.5,minRotation = 0, maxRotation = 0, minSize = 10,
            rotateRatio = 1)
 ```
-![Imgur](http://i.imgur.com/PUrcAwi.png)
+![Imgur](https://i.imgur.com/PUrcAwi.png)
 
 
 [1]:https://cran.r-project.org/web/packages/tm/

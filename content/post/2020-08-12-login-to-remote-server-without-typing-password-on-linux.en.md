@@ -11,7 +11,7 @@ lastmod: '2020-08-12T16:49:14-04:00'
 keywords: []
 description: ''
 comment: no
-toc: false
+toc: true
 autoCollapseToc: false
 postMetaInFooter: no
 contentCopyright: no

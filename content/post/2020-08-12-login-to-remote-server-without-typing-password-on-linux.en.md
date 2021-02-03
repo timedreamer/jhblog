@@ -23,23 +23,27 @@ mathjaxEnableSingleDollar: no
 
 The method is very similar with Windows machine, but much easier, just two steps. The key is `ssh-keygen`. This works with WSL also.
 
+Update: 2021-02-03
+
 <!--more-->
 
 ### 1. Generate local SSH key.
 
 ```shell
 ssh-keygen
+Generating public/private rsa key pair.
+Enter file in which to save the key (/home/td/.ssh/id_rsa): /home/td/.ssh/ID_NAME_HERE
 ```
 
 ### 2. Copy the key to the remote server.
 
 ```shell
-ssh-copy-id -i ~/.ssh/id_rsa.pub your@remote.server
+ssh-copy-id -i ~/.ssh/ID_NAME_HERE.pub your@remote.server
 ```
 
 ### 3. login to the remote server from terminal
 
 ```shell
-ssh your@remote.server
+ssh -i ~/.ssh/ID_NAME_HERE.pub your@remote.server
 ```
 

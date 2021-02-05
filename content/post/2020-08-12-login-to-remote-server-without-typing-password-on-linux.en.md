@@ -44,6 +44,6 @@ ssh-copy-id -i ~/.ssh/ID_NAME_HERE.pub your@remote.server
 ### 3. login to the remote server from terminal
 
 ```shell
-ssh -i ~/.ssh/ID_NAME_HERE.pub your@remote.server
+ssh -i ~/.ssh/ID_NAME_HERE your@remote.server
 ```
 

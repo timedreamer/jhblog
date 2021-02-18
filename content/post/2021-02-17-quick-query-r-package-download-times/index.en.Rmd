@@ -1,0 +1,53 @@
+---
+title: "Quick query R package download times"
+author: "Ji Huang"
+date: '2021-02-17'
+output:
+  html_document:
+    df_print: paged
+categories:
+- dry lab
+- misc
+tags:
+- R
+- misc
+- tools
+lastmod: '2021-02-17T19:45:33-05:00'
+keywords: []
+description: ''
+comment: no
+toc: no
+autoCollapseToc: no
+postMetaInFooter: no
+contentCopyright: no
+reward: no
+mathjax: no
+mathjaxEnableSingleDollar: no
+slug: []
+---
+
+I found a very handy package to get R package download information. The **[dlstats](https://cran.r-project.org/web/packages/dlstats/index.html)**, from Guangchuang Yu.
+
+
+<!--more-->
+
+The package is pretty easy to use, although I had some problems when queried multiple times.
+The plot functions work well.
+
+```{r}
+library("dlstats")
+library("ggplot2")
+library("scales")
+
+plot_cran_stats(c("dplyr", "ggplot2", "scales"))+
+    scale_y_continuous(labels = label_comma())+
+    xlab("Time") +
+    ylab("Number of download")
+
+
+plot_bioc_stats(c("limma","DESeq2", "edgeR"))+
+    scale_y_continuous(labels = label_comma())+
+    xlab("Time") +
+    ylab("Number of download")
+```
+

@@ -7,7 +7,7 @@ enableEmoji = true
 theme = "hugo-theme-even"
 relativeurls = true
 
-ignoreFiles = ["\\.Rmarkdown$", "_files$", "_cache$",  "\\.knit\\.md$", "\\.utf8\\.md$"]
+ignoreFiles = ["\\.Rmd$", "\\.Rmarkdown$", "_files$", "_cache$",  "\\.knit\\.md$", "\\.utf8\\.md$"]
 
 hasCJKLanguage = true     # has chinese/japanese/korean ? # 自动检测是否包含 中文\日文\韩文
 paginate = 5                                              # 首页每页显示的文章数

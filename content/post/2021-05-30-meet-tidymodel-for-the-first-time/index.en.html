@@ -1,0 +1,221 @@
+---
+title: "Meet `tidymodel` for the first time"
+author: "Ji Huang"
+date: '2021-05-30'
+slug: []
+categories:
+  - dry lab
+tags:
+- R
+- statistics
+lastmod: '2021-05-30T17:11:01-04:00'
+keywords: []
+description: ''
+comment: no
+toc: no
+autoCollapseToc: no
+postMetaInFooter: no
+contentCopyright: no
+reward: no
+mathjax: no
+mathjaxEnableSingleDollar: no
+---
+
+<script src="{{< blogdown/postref >}}index.en_files/header-attrs/header-attrs.js"></script>
+
+<div id="TOC">
+
+</div>
+
+<p>I’ve known the <code>tidymodel</code> framework for a while, but never tried it. <a href="https://www.tidymodels.org/">Tidymodel</a> is the new framework from <em>Max Kuhn</em>, the author of <code>caret</code> framework in R. In the past week, I read the <a href="https://www.tmwr.org/">Tidy Modeling with R</a> book and tried <code>tidymodel</code> system for the first time.</p>
+<p>In this post, I fit a random forest model for a classification problem using <code>tidymodel</code>. Just a quick first try of this new system.</p>
+<!--more-->
+<div id="load-dataset" class="section level2">
+<h2>1. Load dataset</h2>
+<p>The dataset is from <code>sda</code> <a href="https://cran.r-project.org/web/packages/sda/index.html">package</a>. There is a dataset <code>singh2002</code> that includes <em>Gene expression data (6033 genes for 102 samples) from the microarray study of Singh et al. (2002).</em>.</p>
+<pre class="r"><code>library(tidymodels)
+library(sda)
+
+tidymodels_prefer()
+
+data(singh2002)</code></pre>
+<p>For quick processing, I just keep the first 100 genes in the model. The dataset consists 102 samples, 52 cancer and 50 healthy samples.</p>
+<pre class="r"><code>gexpr &lt;- tibble(as.data.frame(singh2002$x))
+gexpr$label &lt;- singh2002$y
+gexpr &lt;- select(gexpr, label, V1:V100)</code></pre>
+<pre class="r"><code>table(gexpr$label)</code></pre>
+<pre><code>## 
+##  cancer healthy 
+##      52      50</code></pre>
+</div>
+<div id="build-random-forest-model" class="section level2">
+<h2>2. Build Random Forest model</h2>
+<div id="split-dataset" class="section level3">
+<h3>2.1 Split dataset</h3>
+<pre class="r"><code>set.seed(123)
+gexpr_split &lt;- initial_split(gexpr, strata = label)
+gexpr_train &lt;- training(gexpr_split)
+gexpr_test &lt;- testing(gexpr_split)</code></pre>
+</div>
+<div id="create-cross-validation-set" class="section level3">
+<h3>2.2 Create Cross-Validation set</h3>
+<pre class="r"><code>set.seed(234)
+gexpr_folds &lt;- vfold_cv(gexpr_train, strata = label)
+gexpr_folds</code></pre>
+<pre><code>## #  10-fold cross-validation using stratification 
+## # A tibble: 10 x 2
+##    splits         id    
+##    &lt;list&gt;         &lt;chr&gt; 
+##  1 &lt;split [68/8]&gt; Fold01
+##  2 &lt;split [68/8]&gt; Fold02
+##  3 &lt;split [68/8]&gt; Fold03
+##  4 &lt;split [68/8]&gt; Fold04
+##  5 &lt;split [68/8]&gt; Fold05
+##  6 &lt;split [68/8]&gt; Fold06
+##  7 &lt;split [68/8]&gt; Fold07
+##  8 &lt;split [69/7]&gt; Fold08
+##  9 &lt;split [69/7]&gt; Fold09
+## 10 &lt;split [70/6]&gt; Fold10</code></pre>
+</div>
+<div id="receipes" class="section level3">
+<h3>2.3 Receipes</h3>
+<p>The [usemodels] package helps to <em>quickly create code snippets to fit models using the tidymodels framework.</em></p>
+<pre class="r"><code>usemodels::use_ranger(label ~ ., data = gexpr_train)</code></pre>
+<pre><code>## ranger_recipe &lt;- 
+##   recipe(formula = label ~ ., data = gexpr_train) 
+## 
+## ranger_spec &lt;- 
+##   rand_forest(mtry = tune(), min_n = tune(), trees = 1000) %&gt;% 
+##   set_mode(&quot;classification&quot;) %&gt;% 
+##   set_engine(&quot;ranger&quot;) 
+## 
+## ranger_workflow &lt;- 
+##   workflow() %&gt;% 
+##   add_recipe(ranger_recipe) %&gt;% 
+##   add_model(ranger_spec) 
+## 
+## set.seed(29103)
+## ranger_tune &lt;-
+##   tune_grid(ranger_workflow, resamples = stop(&quot;add your rsample object&quot;), grid = stop(&quot;add number of candidate points&quot;))</code></pre>
+<pre class="r"><code>ranger_recipe &lt;-
+    recipe(formula = label ~ ., data = gexpr_train)</code></pre>
+</div>
+<div id="model-specification" class="section level3">
+<h3>2.4 Model specification</h3>
+<pre class="r"><code>ranger_spec &lt;-
+    rand_forest(trees = 1000) %&gt;%
+    set_mode(&quot;classification&quot;) %&gt;%
+    set_engine(&quot;ranger&quot;)</code></pre>
+</div>
+<div id="workflow" class="section level3">
+<h3>2.5 Workflow</h3>
+<pre class="r"><code>ranger_workflow &lt;-
+    workflow() %&gt;%
+    add_recipe(ranger_recipe) %&gt;%
+    add_model(ranger_spec)</code></pre>
+</div>
+<div id="fit-cv-training-set" class="section level3">
+<h3>2.6 Fit CV training set</h3>
+<pre class="r"><code>doParallel::registerDoParallel()
+set.seed(12345)
+ranger_rs &lt;-
+    fit_resamples(ranger_workflow,
+                  resamples = gexpr_folds,
+                  control = control_resamples(save_pred = TRUE)
+    )</code></pre>
+</div>
+<div id="check-training-performance" class="section level3">
+<h3>2.7 Check Training Performance</h3>
+<p>10-fold CV summary</p>
+<pre class="r"><code>collect_metrics(ranger_rs, summarize = TRUE)</code></pre>
+<pre><code>## # A tibble: 2 x 6
+##   .metric  .estimator  mean     n std_err .config             
+##   &lt;chr&gt;    &lt;chr&gt;      &lt;dbl&gt; &lt;int&gt;   &lt;dbl&gt; &lt;chr&gt;               
+## 1 accuracy binary     0.932    10  0.0297 Preprocessor1_Model1
+## 2 roc_auc  binary     0.988    10  0.0125 Preprocessor1_Model1</code></pre>
+<p>Performance of each fold</p>
+<pre class="r"><code>collect_metrics(ranger_rs, summarize = FALSE)</code></pre>
+<pre><code>## # A tibble: 20 x 5
+##    id     .metric  .estimator .estimate .config             
+##    &lt;chr&gt;  &lt;chr&gt;    &lt;chr&gt;          &lt;dbl&gt; &lt;chr&gt;               
+##  1 Fold01 accuracy binary         1     Preprocessor1_Model1
+##  2 Fold01 roc_auc  binary         1     Preprocessor1_Model1
+##  3 Fold02 accuracy binary         1     Preprocessor1_Model1
+##  4 Fold02 roc_auc  binary         1     Preprocessor1_Model1
+##  5 Fold03 accuracy binary         0.75  Preprocessor1_Model1
+##  6 Fold03 roc_auc  binary         0.875 Preprocessor1_Model1
+##  7 Fold04 accuracy binary         0.875 Preprocessor1_Model1
+##  8 Fold04 roc_auc  binary         1     Preprocessor1_Model1
+##  9 Fold05 accuracy binary         1     Preprocessor1_Model1
+## 10 Fold05 roc_auc  binary         1     Preprocessor1_Model1
+## 11 Fold06 accuracy binary         1     Preprocessor1_Model1
+## 12 Fold06 roc_auc  binary         1     Preprocessor1_Model1
+## 13 Fold07 accuracy binary         1     Preprocessor1_Model1
+## 14 Fold07 roc_auc  binary         1     Preprocessor1_Model1
+## 15 Fold08 accuracy binary         0.857 Preprocessor1_Model1
+## 16 Fold08 roc_auc  binary         1     Preprocessor1_Model1
+## 17 Fold09 accuracy binary         1     Preprocessor1_Model1
+## 18 Fold09 roc_auc  binary         1     Preprocessor1_Model1
+## 19 Fold10 accuracy binary         0.833 Preprocessor1_Model1
+## 20 Fold10 roc_auc  binary         1     Preprocessor1_Model1</code></pre>
+<p>Plot the 10 fold ROC, but most of them have AUC=1.</p>
+<pre class="r"><code>collect_predictions(ranger_rs) %&gt;%
+    group_by(id) %&gt;%
+    roc_curve(label, .pred_cancer) %&gt;%
+    autoplot()</code></pre>
+<p><img src="{{< blogdown/postref >}}index.en_files/figure-html/unnamed-chunk-13-1.png" width="672" /></p>
+<p>Averaged confusion matrix.</p>
+<pre class="r"><code>conf_mat_resampled(ranger_rs, tidy = FALSE) %&gt;%
+    autoplot()</code></pre>
+<p><img src="{{< blogdown/postref >}}index.en_files/figure-html/unnamed-chunk-14-1.png" width="672" /></p>
+</div>
+<div id="fit-testing-set" class="section level3">
+<h3>2.8 Fit Testing set</h3>
+<pre class="r"><code>final_fitted &lt;- last_fit(ranger_workflow, gexpr_split)
+collect_metrics(final_fitted) </code></pre>
+<pre><code>## # A tibble: 2 x 4
+##   .metric  .estimator .estimate .config             
+##   &lt;chr&gt;    &lt;chr&gt;          &lt;dbl&gt; &lt;chr&gt;               
+## 1 accuracy binary             1 Preprocessor1_Model1
+## 2 roc_auc  binary             1 Preprocessor1_Model1</code></pre>
+</div>
+<div id="check-testing-set-performance" class="section level3">
+<h3>2.9 Check Testing set Performance</h3>
+<pre class="r"><code>collect_metrics(final_fitted)</code></pre>
+<pre><code>## # A tibble: 2 x 4
+##   .metric  .estimator .estimate .config             
+##   &lt;chr&gt;    &lt;chr&gt;          &lt;dbl&gt; &lt;chr&gt;               
+## 1 accuracy binary             1 Preprocessor1_Model1
+## 2 roc_auc  binary             1 Preprocessor1_Model1</code></pre>
+<p>All 26 samples were correct.</p>
+<pre class="r"><code>collect_predictions(final_fitted) %&gt;%
+    conf_mat(label, .pred_class)</code></pre>
+<pre><code>##           Truth
+## Prediction cancer healthy
+##    cancer      13       0
+##    healthy      0      13</code></pre>
+<p>The confusion matrix plot is a little confusing. It looks like there are incorrect classfication, while the model predicts all 26 samples correctly.</p>
+<pre class="r"><code>collect_predictions(final_fitted) %&gt;%
+    conf_mat(label, .pred_class) %&gt;%
+    autoplot()</code></pre>
+<p><img src="{{< blogdown/postref >}}index.en_files/figure-html/unnamed-chunk-18-1.png" width="672" /></p>
+</div>
+</div>
+<div id="extra" class="section level2">
+<h2>3. Extra</h2>
+<p>Some things I didn’t cover in this post.</p>
+<ol style="list-style-type: decimal">
+<li>Tuning models using <a href="https://github.com/tidymodels/tune">tune</a> package</li>
+<li>Comparing models.</li>
+</ol>
+<p>Useful links:</p>
+<ol style="list-style-type: decimal">
+<li><a href="https://juliasilge.com/blog/">Julia Silge</a>’s Blogs.</li>
+<li><a href="https://www.kirenz.com/post/2020-12-19-r-tidymodels-housing/">Jan Kirenz</a> posts.</li>
+<li><a href="https://www.tmwr.org/">Tidy Modeling with R</a> Book.</li>
+</ol>
+<p>Some thoughts on tidymodel:</p>
+<p>The tidymodel ecosystem looks like a solid platform for modeling building and testing in R. I like it has so many modules that can cover almost all statistical models. For time-series data, use <a href="https://tidyverts.org/">tidyverts</a>.</p>
+<p>However, because of tidymodel’s modularity, it contains so many packages and so many functions. It does not offer an all-in-one system like <code>caret</code> (and it will probably never be).</p>
+<p>I also have concerns on tidymodel on speed and memory usage. Anyway the tidymodel is definitely an interesting modeling system. I will try it more using my real research problems.</p>
+</div>

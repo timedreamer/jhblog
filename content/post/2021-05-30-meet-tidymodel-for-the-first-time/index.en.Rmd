@@ -1,0 +1,200 @@
+---
+title: "Meet `tidymodel` for the first time"
+author: "Ji Huang"
+date: '2021-05-30'
+slug: []
+categories:
+  - dry lab
+tags:
+- R
+- statistics
+lastmod: '2021-05-30T17:11:01-04:00'
+keywords: []
+description: ''
+comment: no
+toc: no
+autoCollapseToc: no
+postMetaInFooter: no
+contentCopyright: no
+reward: no
+mathjax: no
+mathjaxEnableSingleDollar: no
+---
+
+
+I've known the `tidymodel` framework for a while, but never tried it. [Tidymodel](https://www.tidymodels.org/) is the new framework from *Max Kuhn*, the author of `caret` framework in R. In the past week, I read the [Tidy Modeling with R](https://www.tmwr.org/) book and tried `tidymodel` system for the first time.
+
+In this post, I fit a random forest model for a classification problem using `tidymodel`. Just a quick first try of this new system.
+
+<!--more-->
+
+
+## 1. Load dataset
+
+The dataset is from `sda` [package](https://cran.r-project.org/web/packages/sda/index.html). There is a dataset `singh2002` that includes *Gene expression data (6033 genes for 102 samples) from the microarray study of Singh et al. (2002).*.
+
+```{r, message=FALSE, warning=FALSE}
+library(tidymodels)
+library(sda)
+
+tidymodels_prefer()
+
+data(singh2002)
+```
+
+For quick processing, I just keep the first 100 genes in the model. The dataset consists 102 samples, 52 cancer and 50 healthy samples. 
+
+```{r}
+gexpr <- tibble(as.data.frame(singh2002$x))
+gexpr$label <- singh2002$y
+gexpr <- select(gexpr, label, V1:V100)
+```
+
+```{r}
+table(gexpr$label)
+```
+
+
+## 2. Build Random Forest model
+
+### 2.1 Split dataset
+
+```{r}
+set.seed(123)
+gexpr_split <- initial_split(gexpr, strata = label)
+gexpr_train <- training(gexpr_split)
+gexpr_test <- testing(gexpr_split)
+```
+
+### 2.2 Create Cross-Validation set
+
+```{r}
+set.seed(234)
+gexpr_folds <- vfold_cv(gexpr_train, strata = label)
+gexpr_folds
+```
+
+### 2.3 Receipes
+
+The [usemodels] package helps to *quickly create code snippets to fit models using the tidymodels framework.*
+
+```{r}
+usemodels::use_ranger(label ~ ., data = gexpr_train)
+```
+
+```{r}
+ranger_recipe <-
+    recipe(formula = label ~ ., data = gexpr_train)
+```
+
+### 2.4 Model specification
+
+```{r}
+ranger_spec <-
+    rand_forest(trees = 1000) %>%
+    set_mode("classification") %>%
+    set_engine("ranger")
+```
+
+
+### 2.5 Workflow
+
+```{r}
+ranger_workflow <-
+    workflow() %>%
+    add_recipe(ranger_recipe) %>%
+    add_model(ranger_spec)
+```
+
+
+### 2.6 Fit CV training set
+
+```{r}
+doParallel::registerDoParallel()
+set.seed(12345)
+ranger_rs <-
+    fit_resamples(ranger_workflow,
+                  resamples = gexpr_folds,
+                  control = control_resamples(save_pred = TRUE)
+    )
+
+```
+
+### 2.7 Check Training Performance
+
+10-fold CV summary
+
+```{r}
+collect_metrics(ranger_rs, summarize = TRUE)
+```
+Performance of each fold
+
+```{r}
+collect_metrics(ranger_rs, summarize = FALSE)
+```
+
+Plot the 10 fold ROC, but most of them have AUC=1.
+
+```{r}
+collect_predictions(ranger_rs) %>%
+    group_by(id) %>%
+    roc_curve(label, .pred_cancer) %>%
+    autoplot()
+
+```
+
+Averaged confusion matrix.
+
+```{r}
+conf_mat_resampled(ranger_rs, tidy = FALSE) %>%
+    autoplot()
+```
+
+### 2.8 Fit Testing set
+
+```{r}
+final_fitted <- last_fit(ranger_workflow, gexpr_split)
+collect_metrics(final_fitted) 
+```
+
+### 2.9 Check Testing set Performance
+
+```{r}
+collect_metrics(final_fitted)
+```
+All 26 samples were correct.
+
+```{r}
+collect_predictions(final_fitted) %>%
+    conf_mat(label, .pred_class)
+```
+
+The confusion matrix plot is a little confusing. It looks like there are incorrect classfication, while the model predicts all 26 samples correctly.
+
+```{r}
+collect_predictions(final_fitted) %>%
+    conf_mat(label, .pred_class) %>%
+    autoplot()
+```
+
+## 3. Extra
+
+Some things I didn't cover in this post.
+
+1. Tuning models using [tune](https://github.com/tidymodels/tune) package
+2. Comparing models.
+
+Useful links:
+
+1. [Julia Silge](https://juliasilge.com/blog/)'s Blogs.
+2. [Jan Kirenz](https://www.kirenz.com/post/2020-12-19-r-tidymodels-housing/) posts.
+3. [Tidy Modeling with R](https://www.tmwr.org/) Book.
+
+Some thoughts on tidymodel:
+
+The tidymodel ecosystem looks like a solid platform for modeling building and testing in R. I like it has so many modules that can cover almost all statistical models. For time-series data, use [tidyverts](https://tidyverts.org/).
+
+However, because of tidymodel's modularity, it contains so many packages and so many functions. It does not offer an all-in-one system like `caret` (and it will probably never be). 
+
+I also have concerns on tidymodel on speed and memory usage. Anyway the tidymodel is definitely an interesting modeling system. I will try it more using my real research problems.
+
